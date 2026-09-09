@@ -7,75 +7,62 @@ const [isLogin,setIsLogin]=useState(false)
 const [email,setEmail]=useState('')
 const [q,setQ]=useState('construction')
 const [tenders,setT]=useState([
-{title:'Construction of CC Road & Drain - Nagar Nigam Lucknow', dept:'UP PWD', value:'₹ 42.5 Lakhs', deadline:'18 Aug • 3 days left', location:'Lucknow'},
-{title:'Supply of Electrical Items for PHED', dept:'UP Jal Nigam', value:'₹ 18 Lakhs', deadline:'21 Aug • 6 days left', location:'Kanpur'},
+{title:'CC Road & Drain Work - Nagar Nigam Lucknow', dept:'UP PWD', value:'₹42.5L', loc:'Lucknow'},
+{title:'Electrical Supply - Jal Nigam Kanpur', dept:'UP Jal Nigam', value:'₹18L', loc:'Kanpur'},
 ])
-const [chat,setChat]=useState([{r:'ai',t:'Hi, I am Vikram AI. Ask me about any tender, EMD, BOQ or eligibility.'}])
-const [inp,setInp]=useState('')
 
-useEffect(()=>{ if(localStorage.getItem('vikram_pro')) setIsLogin(true) },[])
+useEffect(()=>{ if(localStorage.getItem('vikram_final')) setIsLogin(true) },[])
 
 if(!isLogin){
 return(
-<div className="min-h-screen bg-[#f7f7f8] flex items-center justify-center p-6">
-<div className="bg-white w-full max-w-[380px] rounded-[32px] p-8 border shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
-<div className="w-12 h-12 bg-black rounded-2xl flex items-center justify-center text-white font-black text-xl mb-6">V</div>
-<h1 className="text-[26px] font-black tracking-tight">Vikram AI SaaS</h1>
-<p className="text-[13px] text-gray-500 mt-1">Professional Tender Management for UP Contractors</p>
-<input value={email} onChange={e=>setEmail(e.target.value)} placeholder="Work email" className="w-full mt-6 border border-gray-200 rounded-full px-5 py-3.5 outline-none text-sm focus:border-black"/>
-<input type="password" placeholder="Password" className="w-full mt-3 border border-gray-200 rounded-full px-5 py-3.5 outline-none text-sm"/>
-<button onClick={()=>{if(email.includes('@')){localStorage.setItem('vikram_pro','1'); setIsLogin(true)}else alert('Valid email dalo')}} className="w-full bg-black text-white rounded-full py-3.5 mt-5 font-bold text-sm">Continue to Dashboard</button>
-<p className="text-[11px] text-gray-400 mt-4 text-center">By continuing, you agree to Terms & Privacy</p>
+<div style={{minHeight:'100vh', background:'#f6f6f7', display:'flex', alignItems:'center', justifyContent:'center', padding:20, fontFamily:'system-ui'}}>
+<div style={{background:'white', width:'100%', maxWidth:380, borderRadius:28, padding:28, border:'1px solid #eee', boxShadow:'0 20px 60px rgba(0,0,0,0.08)'}}>
+<div style={{width:48, height:48, background:'black', color:'white', borderRadius:14, display:'flex', alignItems:'center', justifyContent:'center', fontWeight:900, fontSize:20}}>V</div>
+<h1 style={{fontSize:26, fontWeight:900, margin:'14px 0 0 0', letterSpacing:-0.5}}>Vikram AI SaaS</h1>
+<p style={{fontSize:13, color:'#6b7280', marginTop:6}}>Professional Tender Management for UP Contractors</p>
+<input value={email} onChange={e=>setEmail(e.target.value)} placeholder="Work email - your@company.com" style={{width:'100%', border:'1px solid #e5e7eb', borderRadius:100, padding:'14px 18px', marginTop:22, outline:'none', fontSize:14, boxSizing:'border-box'}}/>
+<input type="password" placeholder="Password" style={{width:'100%', border:'1px solid #e5e7eb', borderRadius:100, padding:'14px 18px', marginTop:12, outline:'none', fontSize:14, boxSizing:'border-box'}}/>
+<button onClick={()=>{ if(email.includes('@')){ localStorage.setItem('vikram_final','1'); setIsLogin(true)}else alert('Valid email dalo')}} style={{width:'100%', background:'black', color:'white', borderRadius:100, padding:'14px', fontWeight:800, marginTop:18, border:'none', fontSize:14}}>Continue to Dashboard</button>
+<div style={{fontSize:11, color:'#9ca3af', marginTop:14, textAlign:'center'}}>Secure login • Demo: any email will work</div>
 </div>
 </div>
 )
 }
 
-const Card = ({children, className=''}:any)=><div className={`bg-white rounded-[24px] border border-gray-100 p-4 shadow-sm ${className}`}>{children}</div>
+const pill=(a:boolean)=>({padding:'10px 20px', borderRadius:100, fontWeight:800, fontSize:13, border:'none', background: a?'black':'white', color: a?'white':'#6b7280', borderBottom: a?'none':'1px solid #eee', boxShadow: a?'none':'0 1px 0 #eee'})
 
 return(
-<div className="min-h-screen bg-[#f7f7f8] max-w-[440px] mx-auto pb-[100px] px-4 pt-6">
-<div className="flex justify-between items-center mb-6">
-<h1 className="text-[24px] font-black">{tab==='tenders'?'Live Tenders':tab==='docs'?'Vault':tab==='purchase'?'Billing':'Vikram AI'}</h1>
-<div className="flex gap-2"><span className="bg-green-100 text-green-800 text-[11px] px-3 py-1 rounded-full font-bold">● LIVE</span><button onClick={()=>{localStorage.removeItem('vikram_pro'); setIsLogin(false)}} className="text-[11px] bg-gray-100 px-3 py-1 rounded-full font-bold">Logout</button></div>
+<div style={{minHeight:'100vh', background:'#f7f7f8', maxWidth:440, margin:'0 auto', padding:'20px 16px 100px 16px', fontFamily:'system-ui'}}>
+<div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:18}}>
+<h1 style={{fontSize:22, fontWeight:900, margin:0}}>{tab==='tenders'?'Live Tenders':tab==='docs'?'Document Vault':tab==='purchase'?'Billing':'Vikram AI'}</h1>
+<div style={{display:'flex', gap:8}}><span style={{background:'#dcfce7', color:'#166534', fontSize:11, padding:'6px 10px', borderRadius:20, fontWeight:800}}>● LIVE</span><button onClick={()=>{localStorage.removeItem('vikram_final'); setIsLogin(false)}} style={{background:'#fee2e2', border:'none', fontSize:11, padding:'6px 10px', borderRadius:20, fontWeight:800}}>Logout</button></div>
 </div>
 
-{tab==='tenders' && <>
-<Card>
-<div className="flex gap-2"><input value={q} onChange={e=>setQ(e.target.value)} className="flex-1 bg-gray-50 border rounded-full px-5 py-3.5 outline-none text-sm" placeholder="Search - PWD, road, Lucknow"/><button className="bg-[#5b4bff] text-white px-6 rounded-full font-bold text-sm">Search</button></div>
-<div className="grid grid-cols-2 gap-2 mt-3 text-[13px]"><div className="bg-gray-50 rounded-full px-4 py-3 font-medium flex justify-between">Department <span>↕</span></div><div className="bg-gray-50 rounded-full px-4 py-3 font-medium flex justify-between">Lucknow <span>↕</span></div></div>
-</Card>
-<div className="flex gap-2 my-4 overflow-auto"><span className="bg-black text-white px-5 py-2 rounded-full text-[12px] font-bold">Recommended</span><span className="bg-white border px-5 py-2 rounded-full text-[12px] font-bold">New</span><span className="bg-white border px-5 py-2 rounded-full text-[12px] font-bold">Closing Soon</span></div>
-<div className="grid gap-3">{tenders.map((t,i)=><Card key={i} className="!bg-[#f0fdf4]!border-green-100"><div className="text-[11px] font-black text-green-700">{t.deadline} • {t.location}</div><div className="font-bold text-[15px] leading-tight mt-1">{t.title}</div><div className="text-[12px] text-gray-500 mt-1">{t.dept} • {t.value}</div><div className="flex gap-2 mt-3"><button className="bg-black text-white text-[12px] px-4 py-2 rounded-full font-bold">View BOQ</button><button className="bg-white border text-[12px] px-4 py-2 rounded-full font-bold">Ask AI</button></div></Card>)}</div>
-</>}
-
-{tab==='docs' && <div className="grid gap-3">
-{[
-{ name:'PAN Card', status:'Verified', color:'green'},
-{ name:'GST Certificate', status:'Verified', color:'green'},
-{ name:'EMD Receipt - PWD/2024', status:'Upload', color:'amber'},
-{ name:'BOQ - Lucknow Road', status:'AI Generated', color:'blue'},
-{ name:'Company Registration', status:'Verified', color:'green'},
-].map((d,i)=><Card key={i}><div className="flex justify-between items-center"><div><div className="font-bold text-[14px]">{d.name}</div><div className="text-[11px] text-gray-500">Last updated 2 days ago</div></div><span className={`text-[11px] px-3 py-1 rounded-full font-bold ${d.color==='green'?'bg-green-100 text-green-800': d.color==='amber'?'bg-amber-100 text-amber-800':'bg-blue-100 text-blue-800'}`}>{d.status}</span></div></Card>)}
-<Card className="border-dashed!bg-gray-50 text-center py-8"><div className="text-[13px] font-bold">+ Upload New Document</div><div className="text-[11px] text-gray-400 mt-1">PDF, JPG up to 10MB</div></Card>
-</div>}
-
-{tab==='purchase' && <div className="grid gap-3">
-<div className="bg-[#5b4bff] rounded-[28px] p-6 text-white"><div className="text-[11px] bg-white/20 w-fit px-3 py-1 rounded-full font-bold">MOST POPULAR</div><div className="text-[22px] font-black mt-3">Pro - ₹999/mo</div><div className="text-[13px] opacity-80 mt-1">Unlimited live tenders, AI bid writer, auto-filled forms, 24x7 support.</div><ul className="text-[12px] mt-4 space-y-1 opacity-90"><li>✓ Unlimited Tender Search</li><li>✓ AI BOQ & Cover Letter</li><li>✓ Document Vault</li></ul><button onClick={()=>alert('Razorpay integration - Payment link will be added')} className="w-full bg-white text-[#5b4bff] rounded-full py-3.5 mt-5 font-black text-sm">Upgrade to Pro</button></div>
-<Card><div className="flex justify-between"><div><div className="font-bold">Starter</div><div className="text-[12px] text-gray-500">₹0 / month - 5 tenders/day</div></div><div className="font-black">Free</div></div></Card>
-</div>}
-
-{tab==='ai' && <Card><div className="h-[420px] overflow-auto space-y-3 pr-1">{chat.map((c:any,i)=><div key={i} className={`text-[13px] p-3 rounded-2xl max-w-[85%] ${c.r==='user'?'bg-black text-white ml-auto':'bg-gray-50 border'}`}>{c.t}</div>)}</div><div className="flex gap-2 mt-4"><input value={inp} onChange={e=>setInp(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'){setChat([...chat,{r:'user',t:inp},{r:'ai',t:`Analyzing "${inp}"...`} ]); setInp('')}}} placeholder="Ask about eligibility, EMD..." className="flex-1 border rounded-full px-4 py-3 text-sm outline-none"/><button onClick={()=>{if(!inp.trim())return; setChat([...chat,{r:'user',t:inp},{r:'ai',t:`Analyzing "${inp}"...`} ]); setInp('')}} className="bg-black text-white px-5 rounded-full font-bold text-sm">Send</button></div></Card>}
-
-<div className="fixed bottom-4 left-1/2 -translate-x-1/2 w-[92%] max-w-[380px] bg-white rounded-full border shadow-[0_10px_40px_rgba(0,0,0,0.12)] flex justify-between p-2">
-{[
-{ id:'tenders', label:'Tenders'},
-{ id:'docs', label:'Vault'},
-{ id:'purchase', label:'Billing'},
-{ id:'ai', label:'AI'},
-].map(t=><button key={t.id} onClick={()=>setTab(t.id)} className={`px-5 py-2.5 rounded-full text-[13px] font-bold transition ${tab===t.id?'bg-black text-white':'text-gray-500'}`}>{t.label}</button>)}
+{tab==='tenders' && <div style={{display:'grid', gap:12}}>
+<div style={{background:'white', borderRadius:24, padding:16, border:'1px solid #eee'}}>
+<input value={q} onChange={e=>setQ(e.target.value)} placeholder="construction" style={{width:'100%', border:'1px solid #e5e7eb', borderRadius:100, padding:'14px 18px', boxSizing:'border-box'}}/>
+<button style={{width:'100%', background:'#5b4bff', color:'white', borderRadius:100, padding:13, fontWeight:800, marginTop:12, border:'none'}}>Search Tenders</button>
 </div>
+{tenders.map((t,i)=><div key={i} style={{background:'#f0fdf4', border:'1px solid #bbf7d0', borderRadius:20, padding:16}}><div style={{fontSize:11, fontWeight:800, color:'#15803d'}}>{t.loc} • Closing soon</div><div style={{fontWeight:800, fontSize:15, marginTop:4}}>{t.title}</div><div style={{fontSize:12, color:'#6b7280', marginTop:4}}>{t.dept} • {t.value}</div><div style={{display:'flex', gap:8, marginTop:10}}><button style={{background:'black', color:'white', borderRadius:100, padding:'7px 14px', fontSize:11, fontWeight:700, border:'none'}}>View BOQ</button><button style={{background:'white', border:'1px solid #ddd', borderRadius:100, padding:'7px 14px', fontSize:11, fontWeight:700}}>Ask AI</button></div></div>)}
+</div>}
 
+{tab==='docs' && <div style={{display:'grid', gap:10}}>
+{[{n:'PAN Card', s:'Verified'},{n:'GST Certificate', s:'Verified'},{n:'EMD Receipt', s:'Upload'},{n:'BOQ Document', s:'AI Generated'},{n:'Company Registration', s:'Verified'}].map((d,i)=><div key={i} style={{background:'white', borderRadius:20, padding:16, border:'1px solid #eee', display:'flex', justifyContent:'space-between', alignItems:'center'}}><div><div style={{fontWeight:800, fontSize:14}}>{d.n}</div><div style={{fontSize:11, color:'#6b7280'}}>Required for tender</div></div><span style={{fontSize:11, padding:'6px 10px', borderRadius:20, fontWeight:800, background: d.s==='Verified'?'#dcfce7':'#fef3c7', color: d.s==='Verified'?'#166534':'#92400e'}}>{d.s}</span></div>)}
+</div>}
+
+{tab==='purchase' && <div style={{display:'grid', gap:12}}>
+<div style={{background:'#5b4bff', borderRadius:26, padding:20, color:'white'}}><div style={{fontSize:11, background:'rgba(255,255,255,0.2)', display:'inline-block', padding:'4px 10px', borderRadius:20, fontWeight:800}}>MOST POPULAR</div><div style={{fontSize:20, fontWeight:900, marginTop:10}}>Pro Plan - ₹999/mo</div><div style={{fontSize:12, opacity:0.9, marginTop:4}}>Unlimited + AI Writer + Vault</div><button style={{width:'100%', background:'white', color:'#5b4bff', borderRadius:100, padding:12, fontWeight:900, marginTop:14, border:'none'}}>Upgrade to Pro</button></div>
+<div style={{background:'white', borderRadius:20, padding:16, border:'1px solid #eee'}}><div style={{fontWeight:800}}>Free Plan - ₹0</div><div style={{fontSize:12, color:'#6b7280'}}>5 Tenders/day</div></div>
+</div>}
+
+{tab==='ai' && <div style={{background:'white', borderRadius:24, padding:16, border:'1px solid #eee'}}><div style={{fontWeight:900, marginBottom:10}}>🤖 Vikram AI</div><div style={{background:'#f6f6f7', borderRadius:16, padding:12, height:300, overflowY:'auto'}}><div style={{fontSize:13, background:'white', border:'1px solid #eee', padding:10, borderRadius:12}}>Hi! Tender ke baare me pucho, mai eligibility aur EMD bata dunga.</div></div></div>}
+
+<div style={{position:'fixed', bottom:14, left:'50%', transform:'translateX(-50%)', width:'92%', maxWidth:380, background:'white', borderRadius:100, border:'1px solid #eee', display:'flex', justifyContent:'space-between', padding:6, boxShadow:'0 12px 30px rgba(0,0,0,0.15)'}}>
+<button onClick={()=>setTab('tenders')} style={pill(tab==='tenders')}>Tenders</button>
+<button onClick={()=>setTab('docs')} style={pill(tab==='docs')}>Vault</button>
+<button onClick={()=>setTab('purchase')} style={pill(tab==='purchase')}>Billing</button>
+<button onClick={()=>setTab('ai')} style={pill(tab==='ai')}>AI</button>
+</div>
 </div>
 )
 }
