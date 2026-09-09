@@ -1,63 +1,62 @@
 'use client'
-import { useState } from 'react'
+import {useState} from 'react'
 
 export default function Page(){
- const [q,setQ]=useState('construction')
- const [tenders,setTenders]=useState([{title:'Live construction Tender - UP PWD', dept:'UP PWD • • 50 Lakhs'}])
- const [chat,setChat]=useState([{r:'ai',t:'Hi! Mai Vikram AI hu. Tender pucho - jaise "UP PWD 50 lakh"'}])
- const [inp,setInp]=useState('')
- const [loading,setLoading]=useState(false)
+const [q,setQ]=useState('construction')
+const [tenders,setT]=useState([{title:'Live construction Tender - UP PWD',dept:'UP PWD',value:'50 Lakhs'}])
+const [chat,setChat]=useState([{r:'ai',t:'Hi! Mai Vikram AI hu. Tender pucho - jaise "UP PWD 50 lakh"'}])
+const [inp,setInp]=useState('')
 
- const search=async()=>{
-  setLoading(true)
-  try{
-   const res=await fetch(`/api/live-tenders?q=${q}`)
-   const d=await res.json()
-   if(d.tenders?.length) setTenders(d.tenders.map((x:any)=>({title:x.title||x.name, dept:`${x.dept||'UP PWD'} • • ${x.value||'50 Lakhs'}`})))
-  }catch{}
-  setLoading(false)
- }
- const send=()=>{
-  if(!inp.trim()) return
-  setChat([...chat,{r:'user',t:inp},{r:'ai',t:`Tumne "${inp}" pucha. Mai ${q} ke best tenders UP eProcure se nikal raha hu.`}])
-  setQ(inp); setInp('')
- }
+const search=async()=>{
+  try{ const d=await(await fetch(`/api/live-tenders?q=${q}`)).json(); if(d.tenders?.length)setT(d.tenders.map((x:any)=>({title:x.title||x.name, dept:x.dept||'UP PWD', value:x.value||'50 Lakhs'}))) }catch{}
+}
+const send=()=>{ if(!inp.trim())return; setChat([...chat,{r:'user',t:inp},{r:'ai',t:`"${inp}" ke liye best ${q} tenders UP eProcure me dhoondh raha hu...`} ]); setInp('') }
 
- return(
- <div className="min-h-screen bg-[#fafafb] p-4 max-w-3xl mx-auto">
-  <div className="flex justify-between items-center mb-4"><h1 className="text-2xl font-black">Tenders</h1><span className="bg-amber-100 text-amber-800 text-xs px-3 py-1 rounded-full">LIVE Mode - {q}</span></div>
-  
-  <div className="bg-white rounded-[28px] p-5 shadow-sm border mb-4">
-   <input value={q} onChange={e=>setQ(e.target.value)} placeholder="Keyword" className="w-full border rounded-full px-5 py-4 mb-3 outline-none" />
-   <div className="grid gap-3">
-    <div className="bg-gray-100 rounded-full px-5 py-4 flex justify-between">Department <span>⇅</span></div>
-    <div className="bg-gray-100 rounded-full px-5 py-4 flex justify-between">State <span>⇅</span></div>
-    <div className="bg-gray-100 rounded-full px-5 py-4 flex justify-between">City <span>⇅</span></div>
-    <div className="bg-gray-100 rounded-full px-5 py-4 flex justify-between">Tender Value <span>⇅</span></div>
-   </div>
-   <button onClick={search} className="w-full bg-[#5b4bff] text-white rounded-full py-4 mt-4 font-bold">{loading?'Searching...':'Search'}</button>
-  </div>
+return(
+<div style={{minHeight:'100vh', background:'#fafafb', padding:16, maxWidth:420, margin:'0 auto', fontFamily:'-apple-system, sans-serif'}}>
 
-  <div className="flex gap-2 overflow-x-auto mb-4">
-   <button className="px-5 py-2 border rounded-full bg-white font-bold">ALL</button>
-   <button className="px-5 py-2 border rounded-full bg-white font-bold">NEW</button>
-   <button className="px-5 py-2 border rounded-full bg-white font-bold">CLOSING SOON</button>
-   <button className="px-5 py-2 border rounded-full bg-[#5b4bff] text-white font-bold">RECOMMENDED</button>
-  </div>
+<div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16}}>
+<h1 style={{fontSize:28, fontWeight:900, margin:0}}>Tenders</h1>
+<span style={{background:'#fef3c7', color:'#92400e', fontSize:11, padding:'6px 12px', borderRadius:20, fontWeight:700}}>LIVE Mode - {q}</span>
+</div>
 
-  <div className="space-y-3 mb-6">
-   {tenders.map((t,i)=>(
-    <div key={i} className="bg-green-50 border border-green-100 rounded-2xl p-4"><div className="text-green-700 text-xs font-bold mb-1">LIVE • LIVE</div><div className="font-bold">{t.title}</div><div className="text-sm text-gray-600">{t.dept}</div></div>
-   ))}
-  </div>
+<div style={{background:'white', borderRadius:28, padding:16, border:'1px solid #eee', boxShadow:'0 2px 20px rgba(0,0,0,0.05)', marginBottom:16}}>
+<input value={q} onChange={e=>setQ(e.target.value)} placeholder="Keyword" style={{width:'100%', border:'1px solid #e5e7eb', borderRadius:100, padding:'16px 20px', outline:'none', fontSize:15, boxSizing:'border-box'}}/>
+<div style={{display:'grid', gap:10, marginTop:12}}>
+<div style={{background:'#f3f3f5', borderRadius:100, padding:'16px 20px', display:'flex', justifyContent:'space-between', fontWeight:600}}>Department <span>↕</span></div>
+<div style={{background:'#f3f3f5', borderRadius:100, padding:'16px 20px', display:'flex', justifyContent:'space-between', fontWeight:600}}>State <span>↕</span></div>
+<div style={{background:'#f3f3f5', borderRadius:100, padding:'16px 20px', display:'flex', justifyContent:'space-between', fontWeight:600}}>City <span>↕</span></div>
+<div style={{background:'#f3f3f5', borderRadius:100, padding:'16px 20px', display:'flex', justifyContent:'space-between', fontWeight:600}}>Tender Value <span>↕</span></div>
+</div>
+<button onClick={search} style={{width:'100%', background:'#5b4bff', color:'white', borderRadius:100, padding:16, marginTop:16, fontWeight:800, fontSize:16, border:'none'}}>Search</button>
+</div>
 
-  <div className="bg-white border rounded-[24px] p-4">
-   <h3 className="font-bold mb-2">🤖 Vikram AI Chat</h3>
-   <div className="bg-gray-50 rounded-xl p-3 h-48 overflow-y-auto mb-3 space-y-2">
-    {chat.map((c,i)=><div key={i} className={`text-sm p-2 rounded-xl max-w-[85%] ${c.r==='user'?'bg-black text-white ml-auto':'bg-white border'}`}>{c.t}</div>)}
-   </div>
-   <div className="flex gap-2"><input value={inp} onChange={e=>setInp(e.target.value)} onKeyDown={e=>e.key==='Enter'&&send()} placeholder="Tender ke baare me pucho..." className="flex-1 border rounded-full px-4 py-3" /><button onClick={send} className="bg-black text-white px-6 rounded-full">Send</button></div>
-  </div>
- </div>
- )
+<div style={{display:'flex', gap:8, marginBottom:16, overflowX:'auto'}}>
+<span style={{padding:'8px 18px', border:'1px solid #e5e7eb', borderRadius:100, background:'white', fontWeight:700, fontSize:13}}>ALL</span>
+<span style={{padding:'8px 18px', border:'1px solid #e5e7eb', borderRadius:100, background:'white', fontWeight:700, fontSize:13}}>NEW</span>
+<span style={{padding:'8px 18px', border:'1px solid #e5e7eb', borderRadius:100, background:'white', fontWeight:700, fontSize:13}}>CLOSING SOON</span>
+<span style={{padding:'8px 18px', borderRadius:100, background:'#5b4bff', color:'white', fontWeight:700, fontSize:13}}>RECOMMENDED</span>
+</div>
+
+<div style={{display:'grid', gap:12, marginBottom:24}}>
+{tenders.map((t:any,i)=><div key={i} style={{background:'#effff3', border:'1px solid #bbf7d0', borderRadius:20, padding:16}}>
+<div style={{color:'#15803d', fontSize:11, fontWeight:900, marginBottom:4}}>LIVE • LIVE</div>
+<div style={{fontWeight:800, fontSize:16, lineHeight:'1.2'}}>{t.title}</div>
+<div style={{fontSize:13, color:'#6b7280', marginTop:6}}>{t.dept} • • {t.value}</div>
+</div>)}
+</div>
+
+<div style={{background:'white', border:'1px solid #eee', borderRadius:24, padding:16}}>
+<h3 style={{fontWeight:900, margin:'0 0 12px 0'}}>🤖 Vikram AI Chat</h3>
+<div style={{background:'#f6f6f7', borderRadius:16, padding:12, height:180, overflowY:'auto', display:'grid', gap:8, marginBottom:12}}>
+{chat.map((c:any,i)=><div key={i} style={{fontSize:13, padding:'10px 12px', borderRadius:14, maxWidth:'85%', background: c.r==='user'?'black':'white', color: c.r==='user'?'white':'black', marginLeft: c.r==='user'?'auto':'0', border: c.r==='user'?'none':'1px solid #eee'}}>{c.t}</div>)}
+</div>
+<div style={{display:'flex', gap:8}}>
+<input value={inp} onChange={e=>setInp(e.target.value)} onKeyDown={(e:any)=>e.key==='Enter'&&send()} placeholder="Tender ke baare me pucho.." style={{flex:1, border:'1px solid #e5e7eb', borderRadius:100, padding:'12px 16px', outline:'none'}}/>
+<button onClick={send} style={{background:'black', color:'white', padding:'0 24px', borderRadius:100, fontWeight:700, border:'none'}}>Send</button>
+</div>
+</div>
+
+</div>
+)
 }
